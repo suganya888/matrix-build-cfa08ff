@@ -1,0 +1,38 @@
+name: Matrix Build - cfa08ff
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    name: Build for Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: matrix-cfa08ff
+        run: echo "Building for Python version ${{ matrix.python-version }}"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Generate build artifact
+        run: |
+          echo "Build output for Python version ${{ matrix.python-version }}" > output-${{ matrix.python-version }}.txt
+          echo "Timestamp: $(date)" >> output-${{ matrix.python-version }}.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-cfa08ff-py${{ matrix.python-version }}
+          path: output-${{ matrix.python-version }}.txt
